@@ -3,6 +3,7 @@ site: Pet Photos
 ---
 <head>
     <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" href="{{ '/styles/main.css' | url }}">
 </head>
 
 {% for photo in collections.photos %}
@@ -12,107 +13,136 @@ site: Pet Photos
 {% endif %} 
 {% endfor %} 
 <!-- Added site name to header/NAV -->
-<header>
+<!-- <header> -->
     <h1>{{ site }}</h1>
-    <nav class="navbar">
-    <a href='/'>Home</a>
-    <a href="/aboutUs">About Us</a>
-</nav>
-</header>
-<hr>
+
+<!-- </header> -->
 
 
 
 
-{{content}}
-
-{% for photo in collections.photos %}
-{% if page.url == photo.url%}
-
-<ul>
-    <li>
-       Keyword: {{photo.data.photo_keyword}}
-    </li>
-    {% if photo.data.photo_location_city != '' %}
-    <li>
-        {{photo.data.photo_location_city}}
-    </li>
-    <li>
-        {{photo.data.photo_location_country}}
-    </li>
-    {%endif%}
-    {% if photo.data.photographer_first_name != '' %}
-    <li>
-        {{photo.data.photographer_first_name}}
-    </li>
-    <li>
-        {{photo.data.photographer_last_name}}
-    </li>
-    {%endif%}
-    <li>
-        {{photo.data.photographer_username}}
-    </li>
-    <li>
-      Credit:  {{photo.data.photo_url}}
-    </li>
-</ul>
-{%endif%}
-{% endfor %}
 
 
-<!-- =====================implementing pageble nav by Bradley coding in liquid===========BIGIN===============-->                           
-
-{% assign urlParts = page.url | split: "/" %}
-<!-- get the number part of the url -->    
-<!-- convert string number to  interger -->
-{% assign numpage = urlParts[2] | times: 1 %}
-{% assign lValue = numpage %}
-{% assign rValue = numpage %}
-<!-- numpage - 1  -->
-{% capture lValue  %}{{% lValue | minus: 1 %}}{% endcapture %}    
-<!-- numpage +  1  -->
-{% capture rValue  %}{{% rValue | plus: 1 %}}{% endcapture %}    
-
-<!-- Rendering the pageable tab -->
-<div class="pagination"style="text-align: center;">
-    <!-- Rendering the pageable tab when the current page is not the first or last page -->
-    {% if numpage >  0  and numpage < 99 %}  
-            <!-- add 00 to the from before convertt back to string -->               
-            {% if numpage < 9  %}  
-                {% capture lurl  %}{{ "/photos/00xx/" | replace: "xx", lValue }}{% endcapture %}
-                {% capture rurl  %}{{ "/photos/00xx/" | replace: "xx", rValue }}{% endcapture %}   
-            <!-- add 0 to the from before convertt back to string -->     
-            {% elsif numpage  > 9 %}
-                {% capture lurl  %}{{ "/photos/0xx/" | replace: "xx", lValue }}{% endcapture %}
-                {% capture rurl  %}{{ "/photos/0xx/" | replace: "xx", rValue }}{% endcapture %}  
-            {% endif %}      
-
-
-        <a   href="{{lurl}}">Previous</a>   &nbsp;
-        <a   href="">{{numpage}}</a>            &nbsp;
-        <a   href="{{rurl}}">Next</a>   
+<div class="nav">
     
+    {% unless page.url != '/' %}
+    <a class="active" href='/'>Home</a>
+    {% endunless%}
+    {% if page.url != '/'%}
+    <a href='/'>Home</a>
+    {% endif%}
+    <a href="/aboutUs">About Us</a>
+
+</div>
+<div class="wrapper">
+<div class="photo">
+{{content}}
+</div>
+ <!-- This displays the photo metadata. -->
+ <!-- It uses a loop to check the URL and see what photo you are on -->
+
+ {% for photo in collections.photos %}
+     {% if page.url == photo.url%}
+     <style> :root {
+        --red: 28;
+        --green: 150;
+        --blue: 130;
+        --accessible-color: calc( ( ( ( (var(--red) * 299) + (var(--green) * 587) + (var(--blue) * 114) ) / 1000 ) - 128 ) * -1000 );
+   }
+    body {
+        color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color) );
+        background-color: rgb( var(--red), var(--green), var(--blue) );
+   }
+    </style>   
+     <h3> Available Details:</h3>
+     <ul>
+
+         {% if photo.data.photo_location_city != '' %}
+         <li>
+             City: {{photo.data.photo_location_city}}
+         </li>
+         <li>
+             Country: {{photo.data.photo_location_country}}
+         </li>
+         {%endif%}
+         {% if photo.data.photographer_first_name != '' %}
+         <li>
+             Photographer: {{photo.data.photographer_first_name}} {{photo.data.photographer_last_name}}
+         </li>
+     
+         {%endif%}
+         <li>
+             Username: {{photo.data.photographer_username}}
+         </li>
+         <li>
+             <a href="{{photo.data.photo_url | url}}">Source</a> 
+         
+         </li>
+     </ul>
+     {%endif%}
+ {% endfor %}
+
+
+ <!-- ============BIGIN===============implementing pageble nav by Bradley coding in liquid===========BIGIN===============-->                           
+
+ {% assign urlParts = page.url | split: "/" %}
+ <!-- get the number part of the url -->    
+ <!-- convert string number to  interger -->
+ {% assign numpage = urlParts[2] | times: 1 %}
+ {% assign lValue = numpage %}
+ {% assign rValue = numpage %}
+ <!-- numpage - 1  -->
+ {% capture lValue  %}{{% lValue | minus: 1 %}}{% endcapture %}    
+ <!-- numpage +  1  -->
+ {% capture rValue  %}{{% rValue | plus: 1 %}}{% endcapture %}    
+
+ <!-- Rendering the pageable tab -->
+</div>
+ <div class="nav ">
+ <!-- Rendering the pageable tab when the current page is not the first or last page -->
+ {% if numpage >  0  and numpage < 99 %}  
+     <!-- add 00 to the lvalue and rvalue before convert back to string -->               
+     {% if numpage < 9  %}  
+         {% capture lurl  %}{{ "/photos/00xx/" | replace: "xx", lValue }}{% endcapture %}
+         {% capture rurl  %}{{ "/photos/00xx/" | replace: "xx", rValue }}{% endcapture %}   
+     <!-- add 00 to the lvalue and 0 to the rvalue before convert back to string -->     
+     {% elsif numpage  == 9 %}
+         {% capture lurl  %}{{ "/photos/00xx/" | replace: "xx", lValue }}{% endcapture %}
+         {% capture rurl  %}{{ "/photos/0xx/" | replace: "xx", rValue }}{% endcapture %}  
+     <!-- add 00 to the lvalue and 0 to rvalue  before convert back to string -->     
+     {% elsif numpage  == 10 %}
+         {% capture lurl  %}{{ "/photos/00xx/" | replace: "xx", lValue }}{% endcapture %}
+         {% capture rurl  %}{{ "/photos/0xx/" | replace: "xx", rValue }}{% endcapture %} 
+     <!-- add 0 to the from before convertt back to string -->     
+     {% elsif numpage  > 10 %}
+         {% capture lurl  %}{{ "/photos/0xx/" | replace: "xx", lValue }}{% endcapture %}
+         {% capture rurl  %}{{ "/photos/0xx/" | replace: "xx", rValue }}{% endcapture %}  
+     {% endif %}      
+
+
+    <a  class="hoover_to_purple" href="{{ lurl |url }}">Previous</a>   &nbsp;
+    <a   href="">{{numpage}}</a>        &nbsp;
+    <a  class="hoover_to_purple" href="{{ rurl | url }}">Next</a>   
+
     <!-- Rendering the pageable tab when the current page is nthe last page -->    
     {% elsif numpage ==  99 %}
         {% capture lurl  %}{{ "/photos/0xx/" | replace: "xx", lValue }}{% endcapture %}             
-        <a   href="{{lurl}}">Previous</a>   &nbsp;
-        <a   href="">{{numpage}}</a>            &nbsp;
-        <a   href="">Next</a>     
+        <a  class="hoover_to_purple" href="{{ lurl | url }}">Previous</a>   &nbsp;
+        <a   href="">{{numpage}}</a>        &nbsp;
+        <a  class="hoover_to_purple" href="">Next</a>    
     <!-- Rendering the pageable tab when the current page is first page --> 
     {% elsif numpage ==  0 %}
         {% capture rurl  %}{{ "/photos/00xx/" | replace: "xx", rValue }}{% endcapture %}                
-        <a   href="">Previous</a>           &nbsp;
-        <a   href="">{{numpage}}</a>            &nbsp;
-        <a   href="{{rurl}}">Next</a>              
-    {% endif %}      
-    
-    
+        <a  class="hoover_to_purple" href="">Previous</a>           &nbsp;
+        <a   href="">{{numpage}}</a>        &nbsp;
+        <a  class="hoover_to_purple" href="{{ rurl | url }}">Next</a>              
+    {% endif %}                      
+ 
 </div>
-    
-<!-- =====================implementing pageble nav by Bradley coding in liquid============END==============-->
-    
+<!-- ===========END============implementing pageble nav by Bradley coding in liquid========================-->
+<div class="container">
     {% unless page.url != '/' %}
-    <ul>
+    <ul class="no-bullets">
         {% for photo in collections.photos %}
             <li>
                 
@@ -129,19 +159,18 @@ site: Pet Photos
 
     {% endunless %}
     </ul>
+</div>
 <!-- Implemented Footer on the page. Added a line break for easy consumption.  -->
 <!-- Added a NAV based Site MAP to the footer  -->
-    <hr>
-    <footer">
+
         <!-- Added Copyright symbol, credit to Bradley -->
         <p>&copy;Copyright Team 6. All rights Reserved!</p>
-        <nav>
+       <div class="nav ">
         <h3>Site Map:</h3>
-        <ul>
         <a href='/'>Home </a>
-        <p><br></p>
+      
         <a href="/aboutUs">About Us</a>
-        </ul>
-    </nav>
-    </footer>
+   
+</div>
+</div>
 </body>

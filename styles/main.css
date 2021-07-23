@@ -1,0 +1,36 @@
+.container {
+    column-count: 3;
+  }
+  ul {
+    list-style-type: none;
+  }
+
+
+  .nav {
+    background-color: #333;
+    overflow: hidden;
+  }
+
+  .nav a {
+      float: center;
+      color: white;
+      text-decoration: none;
+      padding: 14px 16px;
+  }
+  .nav a:hover {
+    background-color: burlywood;
+    color: white;
+  }
+  .nav a.active {
+    background-color: burlywood;
+    color: white;
+  }
+
+  .wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    column-gap: 2.5em;
+  }
+  .photo{
+    margin: 2em;
+  }
