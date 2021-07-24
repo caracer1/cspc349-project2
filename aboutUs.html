@@ -9,12 +9,12 @@
     <div class="nav">
     
         {% unless page.url != '/' %}
-        <a href='/'>Home</a>
+        <a href="{{'/' | url}}">Home</a>
         {% endunless%}
         {% if page.url != '/'%}
-        <a href='/'>Home</a>
+        <a href="{{'/' | url}}">Home</a>
         {% endif%}
-        <a class="active"  href="/aboutUs">About Us</a>
+        <a class="active"  href="{{'aboutUs' | url}}">About Us</a>
     
     </div>
     <main>
@@ -79,9 +79,9 @@
         <nav>
         <h3>Site Map:</h3>
         <ul>
-        <a href='/'>Home </a>
+        <a href="{{'/' | url}}">Home </a>
         <p><br></p>
-        <a href="/aboutUs">About Us</a>
+        <a href="{{'aboutUs' | url}}">About Us</a>
         </ul>
     </nav>
     </footer>

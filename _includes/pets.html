@@ -26,12 +26,12 @@ site: Pet Photos
 <div class="nav">
     
     {% unless page.url != '/' %}
-    <a class="active" href='/'>Home</a>
+    <a class="active" href="{{'/' | url}}">Home</a>
     {% endunless%}
     {% if page.url != '/'%}
-    <a href='/'>Home</a>
+    <a href="{{'/' | url}}">Home</a>
     {% endif%}
-    <a href="/aboutUs">About Us</a>
+    <a href="{{'aboutUs' | url}}">About Us</a>
 
 </div>
 <div class="wrapper">
@@ -98,7 +98,7 @@ site: Pet Photos
 
  <!-- Rendering the pageable tab -->
 </div>
- <div class="nav ">
+ <div class="pagination ">
  <!-- Rendering the pageable tab when the current page is not the first or last page -->
  {% if numpage >  0  and numpage < 99 %}  
      <!-- add 00 to the lvalue and rvalue before convert back to string -->               
@@ -146,7 +146,7 @@ site: Pet Photos
         {% for photo in collections.photos %}
             <li>
                 
-                <a href="{{ photo.url }}">
+                <a href="{{ photo.url | url }}">
                     A {{ photo.data.photo_keyword }} photo
                     by {{ photo.data.photographer_first_name}} {{ photo.data.photographer_last_name }}
                     
@@ -167,9 +167,9 @@ site: Pet Photos
         <p>&copy;Copyright Team 6. All rights Reserved!</p>
        <div class="nav ">
         <h3>Site Map:</h3>
-        <a href='/'>Home </a>
+        <a href="{{'/' | url}}">Home </a>
       
-        <a href="/aboutUs">About Us</a>
+        <a href="{{'aboutUs' | url}}">About Us</a>
    
 </div>
 </div>
